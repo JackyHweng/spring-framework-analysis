@@ -38,6 +38,8 @@ import org.springframework.util.StringValueResolver;
  * @author Juergen Hoeller
  * @since 2.5.2
  */
+
+// 注册 alias 和 beanName 的映射
 public class SimpleAliasRegistry implements AliasRegistry {
 
 	/** Logger available to subclasses. */
@@ -49,9 +51,11 @@ public class SimpleAliasRegistry implements AliasRegistry {
 
 	@Override
 	public void registerAlias(String name, String alias) {
+		// 验证 name 和 alias
 		Assert.hasText(name, "'name' must not be empty");
 		Assert.hasText(alias, "'alias' must not be empty");
 		synchronized (this.aliasMap) {
+			// 如果名字和别名相同，从别名容器中取出这个名字
 			if (alias.equals(name)) {
 				this.aliasMap.remove(alias);
 				if (logger.isDebugEnabled()) {
@@ -59,12 +63,16 @@ public class SimpleAliasRegistry implements AliasRegistry {
 				}
 			}
 			else {
+				// 别名容器获取注册的名字
 				String registeredName = this.aliasMap.get(alias);
+				// 如果存在名字，需要判断是否和原来注册名字相同，是否可以覆盖
 				if (registeredName != null) {
+					// 如果注册名字和输入的名字相同，说明以前已经注册过了，不需要再次注册
 					if (registeredName.equals(name)) {
 						// An existing alias - no need to re-register
 						return;
 					}
+					// 如果不允许覆盖，抛出异常
 					if (!allowAliasOverriding()) {
 						throw new IllegalStateException("Cannot define alias '" + alias + "' for name '" +
 								name + "': It is already registered for name '" + registeredName + "'.");
@@ -74,7 +82,9 @@ public class SimpleAliasRegistry implements AliasRegistry {
 								registeredName + "' with new target name '" + name + "'");
 					}
 				}
+				//检查别名是够循环依赖
 				checkForAliasCircle(name, alias);
+				// 更新 别名容器
 				this.aliasMap.put(alias, name);
 				if (logger.isTraceEnabled()) {
 					logger.trace("Alias definition '" + alias + "' registered for name '" + name + "'");
@@ -97,6 +107,8 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	 * @param alias the alias to look for
 	 * @since 4.2.1
 	 */
+
+	// 判断注册是name -> alias 里面的name 是否存在map的key 或者 value中，判断alias是否存在map的name 或者 value中
 	public boolean hasAlias(String name, String alias) {
 		for (Map.Entry<String, String> entry : this.aliasMap.entrySet()) {
 			String registeredName = entry.getValue();
@@ -198,6 +210,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	 * @see #registerAlias
 	 * @see #hasAlias
 	 */
+	//
 	protected void checkForAliasCircle(String name, String alias) {
 		if (hasAlias(alias, name)) {
 			throw new IllegalStateException("Cannot register alias '" + alias +

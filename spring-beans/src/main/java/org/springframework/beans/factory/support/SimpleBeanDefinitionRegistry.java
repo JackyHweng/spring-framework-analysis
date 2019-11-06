@@ -34,6 +34,7 @@ import org.springframework.util.StringUtils;
  * @author Juergen Hoeller
  * @since 2.5.2
  */
+// 注册Bean的实现类
 public class SimpleBeanDefinitionRegistry extends SimpleAliasRegistry implements BeanDefinitionRegistry {
 
 	/** Map of bean definition objects, keyed by bean name. */
@@ -44,6 +45,7 @@ public class SimpleBeanDefinitionRegistry extends SimpleAliasRegistry implements
 	public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)
 			throws BeanDefinitionStoreException {
 
+		// 校验 beanName 与 beanDefinition 非空
 		Assert.hasText(beanName, "'beanName' must not be empty");
 		Assert.notNull(beanDefinition, "BeanDefinition must not be null");
 		this.beanDefinitionMap.put(beanName, beanDefinition);
