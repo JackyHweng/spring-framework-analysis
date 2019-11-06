@@ -51,6 +51,7 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.core.io.ResourceLoader
  * @see org.springframework.context.ApplicationContext
  */
+// ResourceEntityResolver 继承了  DelegatingEntityResolver ， DelegatingEntityResolver 代理了BeansDtdResolver 和 PluggableSchemaResolver
 public class ResourceEntityResolver extends DelegatingEntityResolver {
 
 	private static final Log logger = LogFactory.getLog(ResourceEntityResolver.class);
@@ -75,15 +76,19 @@ public class ResourceEntityResolver extends DelegatingEntityResolver {
 	public InputSource resolveEntity(@Nullable String publicId, @Nullable String systemId)
 			throws SAXException, IOException {
 
+		// 父类的解析实体
 		InputSource source = super.resolveEntity(publicId, systemId);
 
 		if (source == null && systemId != null) {
 			String resourcePath = null;
 			try {
+				//对输入的 systemId 进行解码
 				String decodedSystemId = URLDecoder.decode(systemId, "UTF-8");
 				String givenUrl = new URL(decodedSystemId).toString();
+				//得到系统的根路径
 				String systemRootUrl = new File("").toURI().toURL().toString();
 				// Try relative to resource base if currently in system root.
+				// 获取的是资源的相对路径
 				if (givenUrl.startsWith(systemRootUrl)) {
 					resourcePath = givenUrl.substring(systemRootUrl.length());
 				}
@@ -100,6 +105,7 @@ public class ResourceEntityResolver extends DelegatingEntityResolver {
 				if (logger.isTraceEnabled()) {
 					logger.trace("Trying to locate XML entity [" + systemId + "] as resource [" + resourcePath + "]");
 				}
+				// 创建新的Resource，Resource转化为流数据，设置 publicId 和 systemId
 				Resource resource = this.resourceLoader.getResource(resourcePath);
 				source = new InputSource(resource.getInputStream());
 				source.setPublicId(publicId);

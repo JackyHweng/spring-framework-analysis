@@ -144,6 +144,8 @@ public class DefaultResourceLoader implements ResourceLoader {
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
 
+		//首先是通过 协议分解器来加载资源,如果找到就直接返回
+		//协议分解器是一个LinkedHashSet，用户自定义协议解决资源策略(调用addProtocolResolver)
 		for (ProtocolResolver protocolResolver : this.protocolResolvers) {
 			Resource resource = protocolResolver.resolve(location, this);
 			if (resource != null) {
@@ -151,13 +153,17 @@ public class DefaultResourceLoader implements ResourceLoader {
 			}
 		}
 
+		//如果协议分解器都定位不到资源,开始走一下逻辑
+		// 如果路径是`/`开头，的使用`getResourceByPath`方法，调用ClassPathContextResource，返回`ClassPathResource`类型的资源
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
 		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
+			// 如果路径是 `classpath` 开头的话，调用 `ClassPathResource`,返回ClassPathResource类型的资源
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
 		else {
+			// 以上没有没成功解析都资源路径，就开始尝试使用URL的方式解析资源
 			try {
 				// Try to parse the location as a URL...
 				URL url = new URL(location);
@@ -165,6 +171,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 			}
 			catch (MalformedURLException ex) {
 				// No URL -> resolve as resource path.
+				// URL都不能解析资源，那当为 `ClassPathResource`返回`ClassPathResource`类型的资源
 				return getResourceByPath(location);
 			}
 		}
@@ -182,6 +189,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * @see org.springframework.web.context.support.XmlWebApplicationContext#getResourceByPath
 	 */
 	protected Resource getResourceByPath(String path) {
+		//最终会调用`ClassPathResource`的构造方法
 		return new ClassPathContextResource(path, getClassLoader());
 	}
 

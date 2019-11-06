@@ -28,6 +28,8 @@ import org.xml.sax.InputSource;
  * @since 2.0
  * @see DefaultDocumentLoader
  */
+
+// 资源转为Document
 public interface DocumentLoader {
 
 	/**
@@ -42,6 +44,11 @@ public interface DocumentLoader {
 	 * @return the loaded {@link Document document}
 	 * @throws Exception if an error occurs
 	 */
+	// InputSource 资源的输入源
+	// EntityResolver 解析所有实体的解析器
+	// ErrorHandler 错误处理
+	// validationMode 验证模式
+	// namespaceAware 命名空间支持。如果要提供对 XML 名称空间的支持，则需要值为 true
 	Document loadDocument(
 			InputSource inputSource, EntityResolver entityResolver,
 			ErrorHandler errorHandler, int validationMode, boolean namespaceAware)

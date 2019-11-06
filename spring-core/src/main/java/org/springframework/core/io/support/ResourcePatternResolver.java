@@ -51,6 +51,7 @@ import org.springframework.core.io.ResourceLoader;
  * @see org.springframework.context.ApplicationContext
  * @see org.springframework.context.ResourceLoaderAware
  */
+//主要是对ResourceLoader的扩展
 public interface ResourcePatternResolver extends ResourceLoader {
 
 	/**
@@ -60,6 +61,7 @@ public interface ResourcePatternResolver extends ResourceLoader {
 	 * for example in the root of all deployed JAR files.
 	 * @see org.springframework.core.io.ResourceLoader#CLASSPATH_URL_PREFIX
 	 */
+	//新的协议前缀 `classpath*:`
 	String CLASSPATH_ALL_URL_PREFIX = "classpath*:";
 
 	/**
@@ -71,6 +73,9 @@ public interface ResourcePatternResolver extends ResourceLoader {
 	 * @return the corresponding Resource objects
 	 * @throws IOException in case of I/O errors
 	 */
+
+	// 这是对ResourceLoader的扩展，为了就是加载多个资源
+	// 支持根据指定的资源路径匹配模式每次返回多个 Resource 实例
 	Resource[] getResources(String locationPattern) throws IOException;
 
 }

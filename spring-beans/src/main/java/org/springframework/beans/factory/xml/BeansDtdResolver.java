@@ -42,6 +42,8 @@ import org.springframework.lang.Nullable;
  * @since 04.06.2003
  * @see ResourceEntityResolver
  */
+
+// Bean dtd 解析器 ， 可以看出加载的时候DTD的实体
 public class BeansDtdResolver implements EntityResolver {
 
 	private static final String DTD_EXTENSION = ".dtd";
@@ -59,8 +61,10 @@ public class BeansDtdResolver implements EntityResolver {
 					"] and system ID [" + systemId + "]");
 		}
 
+		// 判断是不是 .dtd 结尾的
 		if (systemId != null && systemId.endsWith(DTD_EXTENSION)) {
 			int lastPathSeparator = systemId.lastIndexOf('/');
+			// 提取 spring-bean 的位置
 			int dtdNameStart = systemId.indexOf(DTD_NAME, lastPathSeparator);
 			if (dtdNameStart != -1) {
 				String dtdFile = DTD_NAME + DTD_EXTENSION;
@@ -68,7 +72,10 @@ public class BeansDtdResolver implements EntityResolver {
 					logger.trace("Trying to locate [" + dtdFile + "] in Spring jar on classpath");
 				}
 				try {
+
+					// 创建 ClassPathResource 资源
 					Resource resource = new ClassPathResource(dtdFile, getClass());
+					// 获取资源的输入流,并设置publicId 和 systemId
 					InputSource source = new InputSource(resource.getInputStream());
 					source.setPublicId(publicId);
 					source.setSystemId(systemId);
