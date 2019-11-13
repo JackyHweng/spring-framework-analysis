@@ -81,6 +81,7 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 			@Nullable Constructor<?> ctor, Object... args) {
 
 		// Must generate CGLIB subclass...
+		// 委托给 CglibSubclassCreator 实例化
 		return new CglibSubclassCreator(bd, owner).instantiate(ctor, args);
 	}
 
@@ -89,6 +90,7 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 	 * An inner class created for historical reasons to avoid external CGLIB dependency
 	 * in Spring versions earlier than 3.2.
 	 */
+	// 实例化Bean都是通过这个 CglibSubclassCreator 来实例化的
 	private static class CglibSubclassCreator {
 
 		private static final Class<?>[] CALLBACK_TYPES = new Class<?>[]
@@ -112,10 +114,13 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 		 * Ignored if the {@code ctor} parameter is {@code null}.
 		 * @return new instance of the dynamically generated subclass
 		 */
+		//
 		public Object instantiate(@Nullable Constructor<?> ctor, Object... args) {
+			// 通过 Cglib 创建一个代理类
 			Class<?> subclass = createEnhancedSubclass(this.beanDefinition);
 			Object instance;
 			if (ctor == null) {
+				//  没有构造器，那就用BeanUtils来实例化
 				instance = BeanUtils.instantiateClass(subclass);
 			}
 			else {
@@ -130,6 +135,7 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 			}
 			// SPR-10785: set callbacks directly on the instance instead of in the
 			// enhanced class (via the Enhancer) in order to avoid memory leaks.
+			// 设置回调对象 。为了是防止 内存泄露
 			Factory factory = (Factory) instance;
 			factory.setCallbacks(new Callback[] {NoOp.INSTANCE,
 					new LookupOverrideMethodInterceptor(this.beanDefinition, this.owner),
@@ -141,14 +147,19 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 		 * Create an enhanced subclass of the bean class for the provided bean
 		 * definition, using CGLIB.
 		 */
+
 		private Class<?> createEnhancedSubclass(RootBeanDefinition beanDefinition) {
+			// 创建一个Enhance
 			Enhancer enhancer = new Enhancer();
+			// 设置 enhance的父类
 			enhancer.setSuperclass(beanDefinition.getBeanClass());
+			// 设置命名策略
 			enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);
 			if (this.owner instanceof ConfigurableBeanFactory) {
 				ClassLoader cl = ((ConfigurableBeanFactory) this.owner).getBeanClassLoader();
 				enhancer.setStrategy(new ClassLoaderAwareGeneratorStrategy(cl));
 			}
+			// 设置回调拦截器
 			enhancer.setCallbackFilter(new MethodOverrideCallbackFilter(beanDefinition));
 			enhancer.setCallbackTypes(CALLBACK_TYPES);
 			return enhancer.createClass();

@@ -32,6 +32,7 @@ import org.springframework.lang.Nullable;
  * @see PropertyAccessorFactory#forBeanPropertyAccess
  * @see PropertyAccessorFactory#forDirectFieldAccess
  */
+// 可以访问属性的通用型接口（例如对象的 bean 属性或者对象中的字段）
 public interface PropertyAccessor {
 
 	/**

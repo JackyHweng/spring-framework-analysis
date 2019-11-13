@@ -32,6 +32,8 @@ package org.springframework.beans.factory;
  * @author Juergen Hoeller
  * @since 3.1
  */
+
+// 具有标识作用的, 实现了该接口的 bean 是具有被 Spring 容器通知的能力, 通知的方式是采用回调的方式
 public interface Aware {
 
 }

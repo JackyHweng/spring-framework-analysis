@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
  * @since 2.0
  * @see BeanWrapper
  */
+// BeanWrapper 继承了三大接口 PropertyAccessor, PropertyEditorRegistry, TypeConverter
 public interface ConfigurablePropertyAccessor extends PropertyAccessor, PropertyEditorRegistry, TypeConverter {
 
 	/**

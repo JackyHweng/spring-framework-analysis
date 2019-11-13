@@ -40,6 +40,8 @@ import org.springframework.lang.Nullable;
  * @see ConfigurableBeanFactory#addBeanPostProcessor
  * @see BeanFactoryPostProcessor
  */
+
+//  Spring中其中一个工厂钩子，提供Bean实例化阶段的扩展点。请注意，注册后的 BeanPostProcessor 适用于所有该BeanFactory的创建Bean的强化
 public interface BeanPostProcessor {
 
 	/**
@@ -55,6 +57,7 @@ public interface BeanPostProcessor {
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet
 	 */
+	// 注意，这块参数接口的已经不是BeanDefinition了，这里的Bean已经是实例化好的
 	@Nullable
 	default Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
 		return bean;

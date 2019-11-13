@@ -224,6 +224,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	 * @param name the user-specified name
 	 * @return the transformed name
 	 */
+	// 解析别名，返回最终的BeanName
 	public String canonicalName(String name) {
 		String canonicalName = name;
 		// Handle aliasing...

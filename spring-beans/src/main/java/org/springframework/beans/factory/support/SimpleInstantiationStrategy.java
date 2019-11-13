@@ -57,20 +57,26 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	}
 
 
+	// 无参实例化（默认的构造方法）
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner) {
 		// Don't override the class with CGLIB if no overrides.
+		// 判断实例方法没有有覆盖，没有的话就直接用CGLIB来实例化
 		if (!bd.hasMethodOverrides()) {
 			Constructor<?> constructorToUse;
-			synchronized (bd.constructorArgumentLock) {
+			synchronized (bd.constructorArgumentLock) {  //加锁
+				// 获取构造方法
 				constructorToUse = (Constructor<?>) bd.resolvedConstructorOrFactoryMethod;
 				if (constructorToUse == null) {
+					// 获取Bean的类型
 					final Class<?> clazz = bd.getBeanClass();
+					// 如果是接口，直接抛出异常
 					if (clazz.isInterface()) {
 						throw new BeanInstantiationException(clazz, "Specified class is an interface");
 					}
 					try {
-						if (System.getSecurityManager() != null) {
+						// 从clazz中获取构造方法
+						if (System.getSecurityManager() != null) { // 安全模式
 							constructorToUse = AccessController.doPrivileged(
 									(PrivilegedExceptionAction<Constructor<?>>) clazz::getDeclaredConstructor);
 						}
@@ -84,10 +90,12 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 					}
 				}
 			}
+			// 实例化对象
 			return BeanUtils.instantiateClass(constructorToUse);
 		}
 		else {
 			// Must generate CGLIB subclass.
+			// 构造方法重写了，用CGLIB生成子对象
 			return instantiateWithMethodInjection(bd, beanName, owner);
 		}
 	}
@@ -102,6 +110,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 		throw new UnsupportedOperationException("Method Injection not supported in SimpleInstantiationStrategy");
 	}
 
+	// 有参实例化
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner,
 			final Constructor<?> ctor, Object... args) {
@@ -114,9 +123,12 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 					return null;
 				});
 			}
+			// 实例化对象
 			return BeanUtils.instantiateClass(ctor, args);
 		}
 		else {
+
+			// 生成 CGLIB 创建的子类对象
 			return instantiateWithMethodInjection(bd, beanName, owner, ctor, args);
 		}
 	}
@@ -133,6 +145,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 		throw new UnsupportedOperationException("Method Injection not supported in SimpleInstantiationStrategy");
 	}
 
+	// 工厂方法实例化
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner,
 			@Nullable Object factoryBean, final Method factoryMethod, Object... args) {
@@ -148,9 +161,12 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 				ReflectionUtils.makeAccessible(factoryMethod);
 			}
 
+			//获取Method对象
 			Method priorInvokedFactoryMethod = currentlyInvokedFactoryMethod.get();
 			try {
+				// 设置新的Method对象
 				currentlyInvokedFactoryMethod.set(factoryMethod);
+				//执行方法
 				Object result = factoryMethod.invoke(factoryBean, args);
 				if (result == null) {
 					result = new NullBean();

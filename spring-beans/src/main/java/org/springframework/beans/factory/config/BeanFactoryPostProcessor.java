@@ -42,6 +42,10 @@ import org.springframework.beans.BeansException;
  * @see BeanPostProcessor
  * @see PropertyResourceConfigurer
  */
+
+// BeanFactoryPostProcessor 的机制，就相当于给了我们在 Bean 实例化之前最后一次修改 BeanDefinition 的机会
+// 注意的是：这里的BeanFactoryPostProcessor的作用是BeanDefinition加载之后到BeanFactory，但是还没有实例化。
+// 而且，BeanFactoryPostProcessor 作用的对象是BeanDefinition， 而 BeanPostProcessor 作用的对象是已经初始好的Bean
 @FunctionalInterface
 public interface BeanFactoryPostProcessor {
 
@@ -53,6 +57,10 @@ public interface BeanFactoryPostProcessor {
 	 * @param beanFactory the bean factory used by the application context
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 */
+	//1、表示了该方法的作用：在 standard initialization（实在是不知道这个怎么翻译：标准的初始化？） 之后（已经就是已经完成了 BeanDefinition 的加载）
+	// 对 bean factory 容器进行修改。
+	// 其中参数 beanFactory 应该就是已经完成了 standard initialization 的 org.springframework.beans.factory.BeanFactory 。
+	// 2、表示作用时机：所有的 BeanDefinition 已经完成了加载即加载至 BeanFactory 中，但是还没有完成初始化。
 	void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException;
 
 }

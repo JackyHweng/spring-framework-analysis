@@ -33,6 +33,8 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 1.1
  */
+
+// 定义了Bean 的实例化策略 提供三种实例化的策略 有参 无参 工厂方法
 public interface InstantiationStrategy {
 
 	/**

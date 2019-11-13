@@ -41,6 +41,7 @@ public interface InitializingBean {
 	 * @throws Exception in the event of misconfiguration (such as failure to set an
 	 * essential property) or if initialization fails for any other reason
 	 */
+	// 看名字就知道该方法在 BeanFactory 设置完了所有属性之后被调用
 	void afterPropertiesSet() throws Exception;
 
 }

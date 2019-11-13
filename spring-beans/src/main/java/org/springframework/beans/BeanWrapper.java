@@ -46,6 +46,7 @@ import java.beans.PropertyDescriptor;
  * @see org.springframework.validation.BeanPropertyBindingResult
  * @see org.springframework.validation.DataBinder#initBeanPropertyAccess()
  */
+// BeanWrapper 是 BeanDefinition 到 Bean 的中间状态的 Bean，"低级Bean"，相当于一个代理类
 public interface BeanWrapper extends ConfigurablePropertyAccessor {
 
 	/**
