@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Rob Harrop
  */
+// 解析 Properties 配置文件成对应的 BeanDefinition 们的流程
 public class PropertiesBeanDefinitionReaderTests {
 
 	private final DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();

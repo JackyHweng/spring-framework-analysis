@@ -59,7 +59,9 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
+		// 调用父类的onStartUp方法
 		super.onStartup(servletContext);
+		// 注册 DispatcherServlet
 		registerDispatcherServlet(servletContext);
 	}
 
@@ -74,13 +76,17 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 	 * {@link #createDispatcherServlet(WebApplicationContext)}.
 	 * @param servletContext the context to register the servlet against
 	 */
+	// 注册 DispatcherServlet
 	protected void registerDispatcherServlet(ServletContext servletContext) {
+		// 获取 servlet的名字
 		String servletName = getServletName();
 		Assert.hasLength(servletName, "getServletName() must not return null or empty");
 
+		// 创建 WebApplicationContext 对象, 实现交给了子类
 		WebApplicationContext servletAppContext = createServletApplicationContext();
 		Assert.notNull(servletAppContext, "createServletApplicationContext() must not return null");
 
+		// 创建 FrameworkServlet 对象
 		FrameworkServlet dispatcherServlet = createDispatcherServlet(servletAppContext);
 		Assert.notNull(dispatcherServlet, "createDispatcherServlet(WebApplicationContext) must not return null");
 		dispatcherServlet.setContextInitializers(getServletApplicationContextInitializers());
@@ -95,9 +101,11 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 		registration.addMapping(getServletMappings());
 		registration.setAsyncSupported(isAsyncSupported());
 
+		// 获取所有的过滤器
 		Filter[] filters = getServletFilters();
 		if (!ObjectUtils.isEmpty(filters)) {
 			for (Filter filter : filters) {
+				//  注册过滤器
 				registerServletFilter(servletContext, filter);
 			}
 		}

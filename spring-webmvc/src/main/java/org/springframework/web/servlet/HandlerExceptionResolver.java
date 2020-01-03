@@ -33,6 +33,8 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 22.11.2003
  */
+// 处理器异常解析器接口
+// 将处理器( handler )执行时发生的异常，解析( 转换 )成对应的 ModelAndView 结果
 public interface HandlerExceptionResolver {
 
 	/**
@@ -49,6 +51,7 @@ public interface HandlerExceptionResolver {
 	 * @return a corresponding {@code ModelAndView} to forward to,
 	 * or {@code null} for default processing in the resolution chain
 	 */
+	// 解析异常，转换成对应的 ModelAndView 结果
 	@Nullable
 	ModelAndView resolveException(
 			HttpServletRequest request, HttpServletResponse response, @Nullable Object handler, Exception ex);

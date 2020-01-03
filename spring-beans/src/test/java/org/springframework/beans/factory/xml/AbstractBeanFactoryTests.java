@@ -45,6 +45,7 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
  * @author Juergen Hoeller
  * @author Sam Brannen
  */
+// 加载 Bean 的流程
 public abstract class AbstractBeanFactoryTests {
 
 	protected abstract BeanFactory getBeanFactory();
