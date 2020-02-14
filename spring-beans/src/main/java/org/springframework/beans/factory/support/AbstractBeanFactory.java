@@ -357,6 +357,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 							// eagerly by the creation process, to allow for circular reference resolution.
 							// Also remove any beans that received a temporary reference to the bean.
 							// 如果抛异常的话 ， 显式地从单例缓存中删除实例,同时删除接收到对bean的临时引用的任何bean
+							// 解决了循环依赖的问
 							destroySingleton(beanName);
 							throw ex;
 						}

@@ -365,6 +365,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * underlying XML resource, through the corresponding accessors.
 	 * @see #getReaderContext()
 	 */
+	// 解析xml前置操作，留给子类实现
 	protected void preProcessXml(Element root) {
 	}
 
@@ -378,6 +379,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * underlying XML resource, through the corresponding accessors.
 	 * @see #getReaderContext()
 	 */
+	// 解析xml后置操作，留给子类实现
 	protected void postProcessXml(Element root) {
 	}
 

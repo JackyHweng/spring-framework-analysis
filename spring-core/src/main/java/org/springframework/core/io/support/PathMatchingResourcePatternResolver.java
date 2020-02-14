@@ -179,7 +179,7 @@ import org.springframework.util.StringUtils;
  * @see org.springframework.core.io.ResourceLoader#getResource(String)
  * @see ClassLoader#getResources(String)
  */
-// 路径匹配资源的定位器
+// 路径匹配资源的定位器 是 ResourcePatternResolver 的实现
 public class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 
 	private static final Log logger = LogFactory.getLog(PathMatchingResourcePatternResolver.class);

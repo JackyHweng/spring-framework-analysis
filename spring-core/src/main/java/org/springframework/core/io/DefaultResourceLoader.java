@@ -45,11 +45,13 @@ import org.springframework.util.StringUtils;
  * @see FileSystemResourceLoader
  * @see org.springframework.context.support.ClassPathXmlApplicationContext
  */
+// 默认的 资源加载 实现
 public class DefaultResourceLoader implements ResourceLoader {
 
 	@Nullable
 	private ClassLoader classLoader;
 
+	// 自定义资源解析器 集合
 	private final Set<ProtocolResolver> protocolResolvers = new LinkedHashSet<>(4);
 
 	private final Map<Class<?>, Map<Resource, ?>> resourceCaches = new ConcurrentHashMap<>(4);
@@ -62,6 +64,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * @see java.lang.Thread#getContextClassLoader()
 	 */
 	public DefaultResourceLoader() {
+		// 无参构造 使用的是默认的ClassLoader
 		this.classLoader = ClassUtils.getDefaultClassLoader();
 	}
 

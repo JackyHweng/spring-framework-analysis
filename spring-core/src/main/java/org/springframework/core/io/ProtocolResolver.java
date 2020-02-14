@@ -30,7 +30,8 @@ import org.springframework.lang.Nullable;
  * @see DefaultResourceLoader#addProtocolResolver
  */
 
-//协议分解器，用于自定义资源加载策略的
+//协议分解器，用于自定义资源加载策略的  作为 DefaultResourceLoader 的SPI
+//  允许用户自定义加载资源加载协议，而不需要集成 DefaultResourceLoader
 @FunctionalInterface
 public interface ProtocolResolver {
 

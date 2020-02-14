@@ -43,6 +43,7 @@ import org.springframework.util.ResourceUtils;
  * @author Sam Brannen
  * @since 28.12.2003
  */
+// 实现了Resource 大分部接口 作为Resource 接口
 public abstract class AbstractResource implements Resource {
 
 	private static final LogAccessor logAccessor = new LogAccessor(AbstractResource.class);
@@ -76,6 +77,7 @@ public abstract class AbstractResource implements Resource {
 	 * This implementation always returns {@code true} for a resource
 	 * that {@link #exists() exists} (revised as of 5.1).
 	 */
+	// 直接返回可读
 	@Override
 	public boolean isReadable() {
 		return exists();
@@ -84,6 +86,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation always returns {@code false}.
 	 */
+	// 返回没有被打开
 	@Override
 	public boolean isOpen() {
 		return false;
@@ -92,6 +95,7 @@ public abstract class AbstractResource implements Resource {
 	/**
 	 * This implementation always returns {@code false}.
 	 */
+	// 默认返回不是文件
 	@Override
 	public boolean isFile() {
 		return false;
@@ -110,6 +114,7 @@ public abstract class AbstractResource implements Resource {
 	 * This implementation builds a URI based on the URL returned
 	 * by {@link #getURL()}.
 	 */
+	// ResourceUtils 根据URI 获取资源
 	@Override
 	public URI getURI() throws IOException {
 		URL url = getURL();
@@ -136,6 +141,7 @@ public abstract class AbstractResource implements Resource {
 	 * <p>This is the same as in {@link Resource}'s corresponding default method
 	 * but mirrored here for efficient JVM-level dispatching in a class hierarchy.
 	 */
+	//  根据 getInputStream 获取 ReadableByteChannel
 	@Override
 	public ReadableByteChannel readableChannel() throws IOException {
 		return Channels.newChannel(getInputStream());

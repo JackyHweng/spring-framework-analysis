@@ -115,6 +115,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner,
 			final Constructor<?> ctor, Object... args) {
 
+		// 判断是否有 MethodOverrides
 		if (!bd.hasMethodOverrides()) {
 			if (System.getSecurityManager() != null) {
 				// use own privileged to change accessibility (when security is on)
@@ -123,12 +124,12 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 					return null;
 				});
 			}
-			// 实例化对象
+			// 没有override 反射实例化对象
 			return BeanUtils.instantiateClass(ctor, args);
 		}
 		else {
 
-			// 生成 CGLIB 创建的子类对象
+			// 有override 利用 CGLIB 创建的子类对象
 			return instantiateWithMethodInjection(bd, beanName, owner, ctor, args);
 		}
 	}
@@ -151,6 +152,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 			@Nullable Object factoryBean, final Method factoryMethod, Object... args) {
 
 		try {
+			// 设置 Method 可访问
 			if (System.getSecurityManager() != null) {
 				AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
 					ReflectionUtils.makeAccessible(factoryMethod);
@@ -166,7 +168,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 			try {
 				// 设置新的Method对象
 				currentlyInvokedFactoryMethod.set(factoryMethod);
-				//执行方法
+				//执行方法 创建Bean对象
 				Object result = factoryMethod.invoke(factoryBean, args);
 				if (result == null) {
 					result = new NullBean();
