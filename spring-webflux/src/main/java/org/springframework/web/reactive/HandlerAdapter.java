@@ -37,6 +37,7 @@ public interface HandlerAdapter {
 	 * @param handler handler object to check
 	 * @return whether or not the handler is supported
 	 */
+	// 是否支持该处理器
 	boolean supports(Object handler);
 
 	/**
@@ -55,6 +56,7 @@ public interface HandlerAdapter {
 	 * @return {@link Mono} that emits a single {@code HandlerResult} or none if
 	 * the request has been fully handled and doesn't require further handling.
 	 */
+	// 执行处理器，返回 ModelAndView 结果
 	Mono<HandlerResult> handle(ServerWebExchange exchange, Object handler);
 
 }

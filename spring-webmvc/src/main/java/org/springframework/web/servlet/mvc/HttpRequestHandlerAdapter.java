@@ -38,8 +38,10 @@ import org.springframework.web.servlet.ModelAndView;
  * @see LastModified
  * @see SimpleControllerHandlerAdapter
  */
+// 基于 org.springframework.web.HttpRequestHandler 的 HandlerAdapter 实现类
 public class HttpRequestHandlerAdapter implements HandlerAdapter {
 
+	// 判断是 HttpRequestHandler 类型
 	@Override
 	public boolean supports(Object handler) {
 		return (handler instanceof HttpRequestHandler);
@@ -49,7 +51,7 @@ public class HttpRequestHandlerAdapter implements HandlerAdapter {
 	@Nullable
 	public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
+		// HttpRequestHandler 类型的调用
 		((HttpRequestHandler) handler).handleRequest(request, response);
 		return null;
 	}

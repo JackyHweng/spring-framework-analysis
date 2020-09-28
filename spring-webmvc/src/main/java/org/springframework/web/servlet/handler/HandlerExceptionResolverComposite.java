@@ -35,9 +35,11 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public class HandlerExceptionResolverComposite implements HandlerExceptionResolver, Ordered {
 
+	//  resolvers 数组
 	@Nullable
 	private List<HandlerExceptionResolver> resolvers;
 
+	// 优先级，最低
 	private int order = Ordered.LOWEST_PRECEDENCE;
 
 

@@ -37,8 +37,10 @@ import org.springframework.web.servlet.ModelAndView;
  * @see LastModified
  * @see HttpRequestHandlerAdapter
  */
+// 基于 org.springframework.web.servlet.mvc.Controller 的 HandlerAdapter 实现类
 public class SimpleControllerHandlerAdapter implements HandlerAdapter {
 
+	// 判断是 Controller 类型
 	@Override
 	public boolean supports(Object handler) {
 		return (handler instanceof Controller);
@@ -48,12 +50,13 @@ public class SimpleControllerHandlerAdapter implements HandlerAdapter {
 	@Nullable
 	public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
+		// Controller 类型的调用
 		return ((Controller) handler).handleRequest(request, response);
 	}
 
 	@Override
 	public long getLastModified(HttpServletRequest request, Object handler) {
+		// 处理器实现了 LastModified 接口的情况下
 		if (handler instanceof LastModified) {
 			return ((LastModified) handler).getLastModified(request);
 		}

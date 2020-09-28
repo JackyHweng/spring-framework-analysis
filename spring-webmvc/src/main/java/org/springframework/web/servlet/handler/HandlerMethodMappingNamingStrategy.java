@@ -38,6 +38,7 @@ import org.springframework.web.method.HandlerMethod;
  * @since 4.1
  * @param <T> the mapping type
  */
+// Handler 的 Method 的 Mapping 的名字生成策略接口
 @FunctionalInterface
 public interface HandlerMethodMappingNamingStrategy<T> {
 
@@ -47,6 +48,7 @@ public interface HandlerMethodMappingNamingStrategy<T> {
 	 * @param mapping the mapping
 	 * @return the name
 	 */
+	// 获得名字
 	String getName(HandlerMethod handlerMethod, T mapping);
 
 }
